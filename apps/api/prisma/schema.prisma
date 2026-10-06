@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  EMPLOYE
+  TECH
+  ADMIN
+}
+
+enum TicketStatus {
+  OUVERT
+  EN_COURS
+  EN_ATTENTE_RETOUR
+  RESOLU
+  FERME
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(EMPLOYE)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  requestedTickets Ticket[] @relation("TicketRequester")
+  assignedTickets  Ticket[] @relation("TicketAssignee")
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  active Boolean @default(true)
+
+  tickets Ticket[]
+}
+
+model Priority {
+  id          Int    @id @default(autoincrement())
+  label       String @unique
+  level       Int
+  targetHours Int // délai cible de résolution, en heures
+
+  tickets Ticket[]
+}
+
+model Ticket {
+  id          Int          @id @default(autoincrement())
+  number      String       @unique // TT-2026-00001
+  title       String
+  description String
+  status      TicketStatus @default(OUVERT)
+
+  priorityId Int
+  priority   Priority @relation(fields: [priorityId], references: [id])
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  requesterId Int
+  requester   User  @relation("TicketRequester", fields: [requesterId], references: [id])
+
+  assigneeId Int?
+  assignee   User? @relation("TicketAssignee", fields: [assigneeId], references: [id])
+
+  dueDate    DateTime?
+  resolvedAt DateTime?
+  solution   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, priorityId, assigneeId, createdAt])
+  @@index([requesterId])
+}
