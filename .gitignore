@@ -24,3 +24,7 @@ logs/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Others
+CLAUDE.md
+src/generated/
