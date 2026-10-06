@@ -26,6 +26,24 @@ enum TicketStatus {
   FERME
 }
 
+enum NotificationType {
+  TICKET_CREATED
+  STATUS_CHANGED
+  NEW_COMMENT
+  ASSIGNED
+  TICKET_RESOLVED
+}
+
+enum TicketEventType {
+  CREATED
+  STATUS_CHANGED
+  PRIORITY_CHANGED
+  ASSIGNED
+  DUE_DATE_CHANGED
+  RESOLVED
+  REOPENED
+}
+
 model User {
   id           Int      @id @default(autoincrement())
   name         String
@@ -37,6 +55,10 @@ model User {
 
   requestedTickets Ticket[] @relation("TicketRequester")
   assignedTickets  Ticket[] @relation("TicketAssignee")
+  comments         Comment[]
+  attachments      Attachment[]
+  notifications    Notification[]
+  ticketEvents     TicketEvent[]
 }
 
 model Category {
@@ -82,6 +104,91 @@ model Ticket {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  comments      Comment[]
+  attachments   Attachment[]
+  notifications Notification[]
+  feedback      Feedback?
+  events        TicketEvent[]
+
   @@index([status, priorityId, assigneeId, createdAt])
   @@index([requesterId])
 }
+
+model Comment {
+  id          Int          @id @default(autoincrement())
+  content     String       @db.Text
+  internal    Boolean      @default(false)
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  ticketId    Int          @map("ticket_id")
+  ticket      Ticket       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  authorId    Int          @map("author_id")
+  author      User         @relation(fields: [authorId], references: [id])
+  attachments Attachment[]
+
+  @@index([ticketId, createdAt])
+  @@map("comments")
+}
+
+model Attachment {
+  id         Int      @id @default(autoincrement())
+  storageKey String   @unique
+  fileName   String
+  mimeType   String
+  size       Int
+  createdAt  DateTime @default(now())
+
+  ticketId Int
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  commentId Int?
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  uploaderId Int
+  uploader   User @relation(fields: [uploaderId], references: [id])
+
+  @@index([ticketId])
+  @@map("attachments")
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  type      NotificationType
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  ticketId Int
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  rating    Int // 1 à 5, contrainte CHECK en base
+  comment   String?
+  createdAt DateTime @default(now())
+
+  ticketId Int    @unique
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+model TicketEvent {
+  id        Int             @id @default(autoincrement())
+  type      TicketEventType
+  oldValue  String?
+  newValue  String?
+  createdAt DateTime        @default(now())
+
+  ticketId Int
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  actorId Int
+  actor   User @relation(fields: [actorId], references: [id])
+
+  @@index([ticketId, createdAt])
+}
+
