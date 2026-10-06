@@ -1,0 +1,11 @@
+services:
+  postgres:
+    images: postgres:17
+    environment:
+      POSTGRES_USER: techticket
+      POSTGRES_PASSWORD: techticket
+      POSTGRES_DB: techticket
+    ports: ["5432:5432"]
+    volumes : [pgdate:/var/lib/postgresql/data]
+volumes:
+  pgdata:
