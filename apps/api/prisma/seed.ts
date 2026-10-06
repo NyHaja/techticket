@@ -29,7 +29,7 @@ async function main() {
             name: "Jean-Michel Tech",
             email: "tech@techticket.local",
             passwordHash,
-            role: "TECH",
+            role: "TECHNICIEN",
         },
     });
 
