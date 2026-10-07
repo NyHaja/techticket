@@ -4,5 +4,6 @@ packages:
 allowBuilds:
   '@prisma/engines': false
   argon2: false
+  core-js: false
   esbuild: false
   prisma: false
