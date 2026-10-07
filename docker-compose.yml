@@ -7,5 +7,23 @@ services:
       POSTGRES_DB: techticket
     ports: ["5432:5432"]
     volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U techticket"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped ## Docker restarts the container if it stops
+    ports: ["6379:6379"]
+    volumes: [redisdata:/data]
+    healthcheck:     ## Healthchecks are used to check if the container is running  
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
 volumes:
-  pgdata:
+  pgdata:   ## Volumes are used to persist data
+  redisdata:  ## Les sessions Redis sont stockées dans ce volume
