@@ -1,0 +1,83 @@
+[33mcommit d312a9234b10ae069b67f88f3341e88d5444784e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Wed Oct 7 15:37:14 2026 +0200
+
+    feat(api): ajoute Redis et la validation de la configuration au démarrage (#17)
+
+[33mcommit e4121042738b387ad0ce5f503b9778983eb30da9[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Wed Oct 7 14:00:41 2026 +0200
+
+    feat(web): barre latérale filtrée par rôle et job web dans la CI (#11)
+
+[33mcommit 52e23f9abbec51a642fab19a11f0554bc4954a3e[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Wed Oct 7 10:55:03 2026 +0200
+
+    feat(web): ajoute Tailwind, le routage et les pages vides (#9)
+    
+    * feat(web): ajoute Tailwind, le routage et les pages vides
+    
+    * chore(web): met à jour le lockfile et retire le paquet tailwind
+
+[33mcommit 5ef482a579689b207e58154cfd410cab3dc156e4[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Tue Oct 6 17:08:38 2026 +0200
+
+    test du CI (#8)
+    
+    * test du CI
+    
+    * fix seed.ts
+    
+    * Fix CI
+    
+    * test2 CI rouge
+    
+    * fix CI vert
+
+[33mcommit fabbe66660999c38c651207373f210f11733629d[m
+Author: NyHaja <nyhaja@yahoo.com>
+Date:   Tue Oct 6 16:13:34 2026 +0200
+
+    CI
+
+[33mcommit 241685f275fe564f5d8793260f6fe595e10a17f9[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Tue Oct 6 15:40:15 2026 +0200
+
+    feat(api): ajoute le script de données de test (#6)
+
+[33mcommit 43c609b43fe1bbd5fec5ca0c6475c5a679116721[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Tue Oct 6 13:52:16 2026 +0200
+
+    feat(api): ajoute commentaires, pièces jointes, notifications, avis e… (#4)
+    
+    * feat(api): ajoute commentaires, pièces jointes, notifications, avis et historiques
+    
+    * correction sur oldValue et newValue
+
+[33mcommit d3fe55228d7c458fe2a9697b30377c9a2469a198[m
+Author: NyHaja <152415414+NyHaja@users.noreply.github.com>
+Date:   Tue Oct 6 12:46:50 2026 +0200
+
+    feat(api): ajoute le schéma Prisma (users, catégories, priorities, tickets) (#3)
+
+[33mcommit f26dd6d017ec14f40810f630482aaa8af31a2af7[m
+Author: NyHaja <nyhaja@yahoo.com>
+Date:   Tue Oct 6 09:03:14 2026 +0200
+
+    ajout des docs
+
+[33mcommit f402bfd1091df73ed71d727dbccf2936c9fb7147[m
+Author: NyHaja <nyhaja@yahoo.com>
+Date:   Tue Oct 6 08:33:53 2026 +0200
+
+    chore: initialise le monorepo (web, api, docker-compose)
+
+[33mcommit f3fb04c33f29dba5055fa89319a4dd8faafdceb5[m
+Author: NyHaja <nyhaja@yahoo.com>
+Date:   Tue Oct 6 01:27:12 2026 +0200
+
+    Document sur l'architecture du projet
