@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { validateEnv } from './config/env.js';
+import { HealthModule } from './health/health.module.js';
+import { PrismaModule } from './prisma/prisma.module.js';
 
 
 @Module({
@@ -11,6 +13,8 @@ import { validateEnv } from './config/env.js';
       isGlobal: true,           // pour que les variables d'environnement soient accessibles à tous les controllers
       validate: validateEnv,    // vérifie la configuration au démarrage
     }),
+    PrismaModule,              
+    HealthModule,              
   ],
   controllers: [AppController],
   providers: [AppService],
