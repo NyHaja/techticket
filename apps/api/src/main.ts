@@ -8,6 +8,9 @@ async function bootstrap() {
   const config = app.get(ConfigService<Env, true>);
   const port = config.get('PORT', { infer: true });
 
+  app.setGlobalPrefix('api'); // toutes les routes sont définies par /api/...
+  app.enableShutdownHooks();  // déclenche les hooks de déconnexion
+
   await app.listen(port);
   console.log(`Application démarrée sur http://localhost:${port}`);
 }
