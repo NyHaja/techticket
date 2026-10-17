@@ -5,6 +5,8 @@ import { AppService } from './app.service.js';
 import { validateEnv } from './config/env.js';
 import { HealthModule } from './health/health.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { RedisModule } from './redis/redis.module.js';
+import { AuthModule } from './auth/auth.module.js';
 
 
 @Module({
@@ -14,7 +16,9 @@ import { PrismaModule } from './prisma/prisma.module.js';
       validate: validateEnv,    // vérifie la configuration au démarrage
     }),
     PrismaModule,              
-    HealthModule,              
+    HealthModule,
+    RedisModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
