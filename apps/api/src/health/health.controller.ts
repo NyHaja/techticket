@@ -1,7 +1,9 @@
 import { Controller, Get, Inject, ServiceUnavailableException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { REDIS_CLIENT, type RedisClient } from '../redis/redis.module.js';
+import { Public } from '../auth/decorators.js';
 
+@Public()
 @Controller('health')
 export class HealthController {
     constructor(
