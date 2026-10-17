@@ -1,0 +1,73 @@
+@base = http://localhost:3000/api
+
+### 1. Connexion employé (200)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "employe@techticket.local", "password": "DEVELOPPEMENT" }
+
+### 2. Qui suis-je ? (200 après la connexion)
+GET {{base}}/auth/me
+
+### 3. Mauvais mot de passe (401)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "employe@techticket.local", "password": "faux" }
+
+### 4. Email inconnu (401, même message que le 3)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "inconnu@techticket.local", "password": "faux" }
+
+### 5. Email mal formé (400)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "pas-un-email", "password": "x" }
+
+### 6. Champ en trop (400)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "employe@techticket.local", "password": "Password123!", "role": "ADMIN" }
+
+### 7. Déconnexion (204)
+POST {{base}}/auth/logout
+
+### 8. Qui suis-je ? (401 après la déconnexion)
+GET {{base}}/auth/me
+
+### 9. Health (200 avec database et redis "up")
+GET {{base}}/health
+
+### R1. Liste des utilisateurs sans être connecté (401)
+GET {{base}}/users
+
+### R2. Connexion employé
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "employe@techticket.local", "password": "DEVELOPPEMENT" }
+
+### R3. Employé → liste des utilisateurs (403)
+GET {{base}}/users
+
+### R4. Connexion admin
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@techticket.local", "password": "DEVELOPPEMENT" }
+
+### R5. Admin → liste des utilisateurs (200, sans hash)
+GET {{base}}/users
+
+### R6. Health sans session (200 : route publique)
+GET {{base}}/health
+
+### R7. Brute force : envoie cette requête 6 fois de suite (la 6e → 429)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@techticket.local", "password": "mauvais" }
