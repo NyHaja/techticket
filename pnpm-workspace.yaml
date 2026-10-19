@@ -6,4 +6,5 @@ allowBuilds:
   argon2: false
   core-js: false
   esbuild: false
+  lefthook: false
   prisma: false
