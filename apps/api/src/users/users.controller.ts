@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { CurrentUser, Roles } from '../auth/decorators.js';
+import { /* CurrentUser, */ Roles } from '../auth/decorators.js';
 import { UsersService } from './users.service.js';
 
 // Administrateurs uniquement
