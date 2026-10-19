@@ -7,12 +7,12 @@ import {
     Post,
     Req,
     Res,
-    UnauthorizedException,
+    // UnauthorizedException,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
-import { Public } from './decorators.js';
+import { CurrentUser, Public } from './decorators.js';
 import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
@@ -62,14 +62,7 @@ export class AuthController {
  */
 
     @Get('me')
-    async me(@Req() req: Request) {
-        const userId = req.session.userId;
-        if (!userId) throw new UnauthorizedException('Vous devez être connecté pour accéder à cette ressource');
-        const user = await this.auth.findActiveUser(userId);
-        if (!user) {
-            await this.destroySession(req);
-            throw new UnauthorizedException('Session expirée, veuillez vous reconnecter');
-        }
+    me(@CurrentUser() user: NonNullable<Request['user']>) {
         return { user };
     }
 }
