@@ -9,6 +9,8 @@ import TicketDetailsPage from "./pages/TicketDetailsPage";
 import ReportsPage from "./pages/ReportsPage";
 import AdminPage from "./pages/AdminPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import RequireAuth from "./features/auth/RequireAuth";
+import RequireRole from "./features/auth/RequireRole";
 
 export const router = createBrowserRouter([
     {
@@ -16,20 +18,46 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
     },
     {
-        path: "/",
-        element: <AppLayout />,
+        element: <RequireAuth />,
         children: [
-            { index: true, element: <DashboardPage /> },
-            { path: "tickets", element: <TicketsPage /> },
-            { path: "tickets/new", element: <NewTicketPage /> },
-            { path: "tickets/:id", element: <TicketDetailsPage /> },
-            { path: "my-tickets", element: <MyTicketsPage /> },
-            { path: "reports", element: <ReportsPage /> },
-            { path: "admin", element: <AdminPage /> },
+            { 
+                path: "/",
+                element: <AppLayout />,
+                children: [
+                    { index: true, element: <DashboardPage /> },
+                    { path: "tickets/:id", element: <TicketDetailsPage /> },
+                    {
+                        element: <RequireRole roles={["EMPLOYE"]} />,
+                        children: [
+                            { path: "tickets/new", element: <NewTicketPage /> },
+                            { path: "my-tickets", element: <MyTicketsPage /> },
+                        ],
+                    },
+                    { 
+                        element: <RequireRole roles={["TECH", "ADMIN"]} />,
+                        children: [{ path: "tickets", element: <TicketsPage /> }],   
+                    },
+                    {
+                        element: <RequireRole roles={["ADMIN"]} />,
+                        children: [
+                            { path: "reports", element: <ReportsPage /> },
+                            { path: "admin", element: <AdminPage /> }
+                        ],
+                    },
+                ],
+            },
         ],
     },
     {
         path: "*", element: <NotFoundPage />,
     },
 ]);
+
+/**
+ * La notion clé : les routes sans chemin (pathless layout routes).
+ * RequireAuth et RequireRole n’ont pas de path.
+ * Elles n’ajoutent rien à l’URL, elles enveloppent leurs enfants.
+ * On empile ainsi les contrôles comme des couches : connecté ? → mise en page → bon rôle ? → page.
+ * C’est le même principe que la chaîne de guards côté API.
+ */
         

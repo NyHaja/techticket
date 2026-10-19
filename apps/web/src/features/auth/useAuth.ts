@@ -51,3 +51,9 @@ export function useLogout() {
         },
     });
 }
+
+export function useCurrentUser(): AuthUser {
+    const { data } = useMe();
+    if (!data) throw new Error('Utilisateur non connecté');
+    return data;
+}
