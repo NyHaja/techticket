@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "lefthook install"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +18,8 @@
     }
   },
   "packageManager": "pnpm@12.9.1",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "lefthook": "^2.2.2"
+  }
 }
