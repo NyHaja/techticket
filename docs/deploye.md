@@ -175,4 +175,4 @@ _À compléter à l'issue « Premier déploiement »._
 
 | Date | Action | Par |
 |---|---|---|
-| <JJ/MM/AAAA> | Création et sécurisation du serveur | <toi> |
+| 20/10/2026 | Création et sécurisation du serveur | <toi> |
