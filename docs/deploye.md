@@ -9,11 +9,11 @@
 |---|---|
 | Fournisseur | OVH (VPS) |
 | Système | Ubuntu 26.04 LTS (64 bits) |
-| Taille | <ex. 2 vCPU / 4 Go RAM / 40 Go SSD> |
-| Localisation | <ex. France> |
+| Taille | 2 vCPU / 4 Go RAM / 40 Go SSD |
+| Localisation | France> |
 | Nom d'hôte | techticket-prod |
 | Domaine | <ex. sslip.io ou ton domaine> |
-| Date de création | <JJ/MM/AAAA> |
+| Date de création | 20/10/2026 |
 
 Accès de secours : console KVM et mode rescue dans l'espace client OVH.
 
