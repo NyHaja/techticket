@@ -1,0 +1,32 @@
+# Le domaine vient d'une variable d'environnement : aucune IP dans le dépôt
+{$DOMAIN} {
+	# Compression des réponses (performance)
+	encode zstd gzip
+
+	# 1) Les appels API → conteneur "api"
+	#    "handle" garde le préfixe /api, que NestJS attend (setGlobalPrefix)
+	handle /api/* {
+		reverse_proxy api:3000
+	}
+
+	# 2) Tout le reste → l'application React
+	handle {
+		root * /srv
+		# Fichiers JS/CSS avec un hash dans le nom : on peut les garder en cache 1 an
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		# Une route React (/admin, /my-tickets…) n'est pas un vrai fichier :
+		# on renvoie index.html et React Router affiche la bonne page
+		try_files {path} /index.html
+		file_server
+	}
+
+	# En-têtes de sécurité appliqués à toutes les réponses
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}
