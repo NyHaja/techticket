@@ -1,0 +1,31 @@
+# Dépendances
+**/node_modules
+
+# Builds (dist et cache incrémental de TypeScript, régénérés dans l'image)
+**/dist
+**/*.tsbuildinfo
+
+# Environnement
+.env
+**/.env
+**/.env.*
+!**/.env.example
+
+# Git
+.git
+.github
+
+# Prisma : client régénéré par "prisma generate" pendant le build
+apps/api/src/generated
+
+# Front : inutile pour l'image de l'API
+apps/web
+
+# Editeur / OS / journaux
+.vscode/*
+!.vscode/extensions.json
+**/*.log
+coverage
+
+# Others
+CLAUDE.md
