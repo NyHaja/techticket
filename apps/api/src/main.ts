@@ -6,9 +6,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from './config/env.js';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService<Env, true>);
   const redis = app.get<RedisClient>(REDIS_CLIENT);
   const isProd = config.get('NODE_ENV', { infer: true }) === 'production';
@@ -25,6 +26,15 @@ async function bootstrap() {
       transform: true,
     }),
   )
+
+  // En production, le navigateur parle en HTTPS au reverse proxy, qui parle ensuite en HTTP à l'API.
+  // Sans cette config, l'API croit la connexion non sécurisée et refuse d'envoyer le cookie "secure".
+  // On fait confiance à un seul niveau de proxy (le nôtre), et uniquement en production :
+  // en local, il n'y a pas de proxy et un client pourrait falsifier l'en-tête X-Forwarded-For.
+  if (isProd) {
+    app.set('trust proxy', 1);
+  }
+
   // Sessions stockées dans Redis
   app.use(
     session({

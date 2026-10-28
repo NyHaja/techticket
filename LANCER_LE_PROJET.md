@@ -32,13 +32,13 @@ cd apps/api
 cp .env.example .env
 
 # Générer le client Prisma
-pnpm prisma generate --config prisma7.config.ts
+pnpm prisma generate
 
 # Appliquer les migrations à la base
-pnpm prisma migrate dev --config prisma7.config.ts
+pnpm prisma migrate dev
 
 # Insérer les données de test
-pnpm prisma db seed --config prisma7.config.ts
+pnpm prisma db seed
 ```
 
 Comptes de test créés par le seed (mot de passe : `DEVELOPPEMENT`) :
@@ -85,7 +85,7 @@ Pour tout arrêter : `Ctrl+C` dans chaque terminal, puis `docker compose down` �
 pnpm test                                     # tests unitaires
 pnpm lint                                     # lint
 pnpm exec tsc --noEmit                        # vérification des types (comme la CI)
-pnpm prisma studio --config prisma7.config.ts # interface pour explorer la base
+pnpm prisma studio # interface pour explorer la base
 
 # Dans apps/web
 pnpm build                                    # build de production
