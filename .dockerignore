@@ -19,7 +19,7 @@
 apps/api/src/generated
 
 # Front : inutile pour l'image de l'API
-apps/web
+# apps/web
 
 # Editeur / OS / journaux
 .vscode/*
