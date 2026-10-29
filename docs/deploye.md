@@ -162,7 +162,42 @@ docker compose version
 
 ## 11. Déploiement de l'application
 
-_À compléter à l'issue « Premier déploiement »._
+```bash
+ssh user@<IP_DU_VPS>
+
+sudo mkdir -p /opt/teckticket
+sudo chown nyhaja:nyhaja /opt/techticket
+# Si le dépôt est public : 
+git clone htts://github.com/NyHaja/teckticket.git /opt/techticket
+#Si le dépot git est privé, il faut ajouter une clé ssh privée du serveur en lecture seule dans git puis 
+git clone git@github.com:NyHaja/teckticket.git /opt/techticket
+###
+cd /opt/teckticket    # /opt est l'emplacement conventionnel sous Linux ppour les applications ajoutées à la main.
+```
+### Lancer la pile
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+
+#PUIS
+docker compose -f docker-compose.prod.yml --env-file .env.prod ps -a
+docker compose -f docker-compose.prod.yml --env-file .env.prod logs web | grep -i ceriticate
+```
+Tu dois voir `certificate obtained succefully` avec l'émetteur `acme-v02.api.ketsencrypt.org`. C'est une vrai certificat
+
+### Initialiser la production
+```bash
+read -s -p "Mot de passe admin : " ADMIN_PASSWORD && echo #la saisie est masquée
+
+export ADMIN_PASSWORD   # une variable créee avec `read`n'existe que dans le shell courant. export la transmet aux programme lancés depuis CE shell
+
+docker compose -f docker-compose.prod.yml --env-file .env.prod run --rm \
+  -e ADMIN_EMAIL="<ton-email>" \
+  -e ADMIN_NAME="<Ton Nom>" \
+  -e ADMIN_PASSWORD \
+  api node dist/scripts/init-prod.js
+
+unset ADMIN_PASSWORD    # supprime la variable de la mémoire du shell
+```
 
 ## 12. Dépannage
 
@@ -175,4 +210,13 @@ _À compléter à l'issue « Premier déploiement »._
 
 | Date | Action | Par |
 |---|---|---|
-| 20/10/2026 | Création et sécurisation du serveur | <toi> |
+| 20/10/2026 | Création et sécurisation du serveur | Ny Haja |
+| 29/10/2026 | premier déploiement en production | Ny Haja |
+
+## 14. Mettre à jour l'application
+
+```bash
+cd /opt/techticket
+git pull
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+```
