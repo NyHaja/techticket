@@ -1,0 +1,61 @@
+name: Images
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+# Droits minimaux du GITHUB_TOKEN
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # si l'image api échoue, on construit quand même l'image web
+      matrix:
+        app: [api, web] # le même job, exécuté 2 fois en parallèle
+    steps:
+      - uses: actions/checkout@v4
+
+      # Buildx : le moteur de build moderne de Docker (nécessaire pour le cache)
+      - uses: docker/setup-buildx-action@v3
+
+      # Connexion à GHCR, uniquement quand on publie (pas sur les PR)
+      - name: Connexion à GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Calcule automatiquement les tags selon l'événement (PR, main, v*)
+      - name: Tags de l'image
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/nyhaja/techticket-${{ matrix.app }}
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=main,enable={{is_default_branch}}
+            type=sha,prefix=sha-
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      # Construit l'image, et la publie sauf sur les PR
+      - name: Build (et push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/${{ matrix.app }}/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
