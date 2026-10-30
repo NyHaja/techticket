@@ -3,10 +3,11 @@ name: techticket
 services:
   # ─── Reverse proxy + frontend : le SEUL service exposé ───
   web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-    image: techticket-web
+    # build:
+    #   context: .
+    #   dockerfile: apps/web/Dockerfile
+    # image: techticket-web
+    image: ghcr.io/nyhaja/techticket-web:${TAG:?La variable TAG doit indiquer la version à déployer}
     restart: unless-stopped
     ports:
       - "80:80"
@@ -24,10 +25,11 @@ services:
 
   # ─── API NestJS : aucun port publié ───
   api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    image: techticket-api
+    # build:
+    #   context: .
+    #   dockerfile: apps/api/Dockerfile
+    # image: techticket-api
+    image: ghcr.io/nyhaja/techticket-api:${TAG:?La variable TAG doit indiquer la version à déployer}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -44,10 +46,11 @@ services:
 
   # ─── Migrations : s'exécute une fois puis s'arrête ───
   migrate:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    image: techticket-api
+    # build:
+    #   context: .
+    #   dockerfile: apps/api/Dockerfile
+    # image: techticket-api
+    image: ghcr.io/nyhaja/techticket-api:${TAG:?La variable TAG doit indiquer la version à déployer}
     command: ["node_modules/.bin/prisma", "migrate", "deploy"]
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
